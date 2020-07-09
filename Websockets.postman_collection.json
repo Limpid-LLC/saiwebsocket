@@ -1,0 +1,86 @@
+{
+	"info": {
+		"_postman_id": "2447cb6a-f0c3-4112-85bf-20cb1fe99802",
+		"name": "Websockets",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "http://localhost:8000",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "method",
+						"value": "broadcast",
+						"disabled": true
+					},
+					{
+						"key": "message",
+						"value": "incognito|server hand",
+						"disabled": true
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "method",
+							"value": "get_clients",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "method",
+							"value": "registeredTokenList",
+							"type": "text"
+						},
+						{
+							"key": "method",
+							"value": "registerToken",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "method",
+							"value": "unregisterToken",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "method",
+							"value": "broadcast",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "message",
+							"value": "abc123token|tjujujujt",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "token",
+							"value": "abc1",
+							"type": "text",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8000",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000"
+				}
+			},
+			"response": []
+		}
+	]
+}
