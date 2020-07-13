@@ -101,8 +101,6 @@ Echo service:
   - Parameters
     * method : get_clients
     * message : message
-  - Return
-    * ```rrr```
 - Register Token
   - Parameters
     * method : registerToken
