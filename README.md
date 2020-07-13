@@ -1,7 +1,7 @@
 # saiWebSocket
 WebSockets message broker
 # Start SaiWebSocket Server
- $ ./websockets_pro 
+ ```$ ./websockets_pro``` 
 # Config
 You should have an configuration file websockets.conf in the current working directory. Here is a full example of configuration file:
 ```
