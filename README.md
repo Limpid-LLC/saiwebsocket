@@ -79,11 +79,11 @@ Message example:
 ```
  abc1,group/,abc3|Hello 
 ```
-"Hello" message will delivered to the clients with the following tokens from the config file example:
-abc1
-abc3
-group/item1
-group/item2
+"Hello" message will delivered to the clients with the following tokens from the config file example:\
+abc1\
+abc3\
+group/item1\
+group/item2\
 
 # Service Messages
 Register token from webclient side:
