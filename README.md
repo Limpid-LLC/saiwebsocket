@@ -83,7 +83,7 @@ Message example:
 abc1\
 abc3\
 group/item1\
-group/item2\
+group/item2
 
 # Service Messages
 Register token from webclient side:
