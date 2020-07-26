@@ -4,7 +4,8 @@
 <script>
 	var input = document.getElementById("input");
 	var output = document.getElementById("output");
-	var socket = new WebSocket("wss://localhost:8000/ws?RegisterToken=abc1");
+	var socket = new WebSocket("ws://ec2-18-218-186-169.us-east-2.compute.amazonaws.com:9967/ws?RegisterToken=wsadminpanel");
+	//~ var socket = new WebSocket("wss://localhost:8000/ws?RegisterToken=yahoo");
 
 	socket.onopen = function () {
 		output.innerHTML += "Status: Connected\n";

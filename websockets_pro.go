@@ -119,8 +119,8 @@ type saiwebsocketconfig struct {
 	AllowUnregisteredClients string
 	AllowUnregisteredHttpClients string
 	RegisteredTokensUrl string
-	crt string
-	key string
+	Crtfile string
+	Keyfile string
 }
 
 var websocketconfig saiwebsocketconfig
@@ -164,12 +164,15 @@ func main() {
 
 	// Start the server 
 	fmt.Println("http server started on "+websocketconfig.Host+":"+websocketconfig.Port)
-	if len(websocketconfig.crt) > 0  {
-		err := http.ListenAndServeTLS(websocketconfig.Host+":"+websocketconfig.Port, websocketconfig.crt, websocketconfig.key, nil)
+	fmt.Println(len(websocketconfig.Crtfile));
+	if len(websocketconfig.Crtfile) > 0  {
+		fmt.Println("Serve wss..");
+		err := http.ListenAndServeTLS(websocketconfig.Host+":"+websocketconfig.Port, websocketconfig.Crtfile, websocketconfig.Keyfile, nil)
 		if err != nil {
 			fmt.Println("Listen&Serve tls: ", err)
 		} else {fmt.Println("Listen&Serve ") }
 	} else {
+		fmt.Println("Serve ws");
 		err := http.ListenAndServe(websocketconfig.Host+":"+websocketconfig.Port, nil)
 		if err != nil {
 			fmt.Println("Listen&Serve: ", err)
