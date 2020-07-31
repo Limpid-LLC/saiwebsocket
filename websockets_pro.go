@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"net/url"
 	"strings"
 	"encoding/json"
 	//~ "bytes"
@@ -13,6 +14,7 @@ import (
 )
 
 var clients = make(map[*websocket.Conn]string) // connected clients
+var httpclients = make(map[string]string) // connected clients
 var allowsTokens = make(map[string]bool)	   // allows clients
 var broadcast = make(chan string)            // broadcast channel
 
@@ -55,6 +57,15 @@ func api(w http.ResponseWriter, r *http.Request ) {
 			}
 			fmt.Println("clients list:",clients)
 		}
+		case "httpClientsList" : {
+			jsonString, err := json.Marshal(httpclients)
+			if err != nil {
+				w.Write([]byte("{\"error\":\"json encoding error\"}"))
+			} else {
+				w.Write([]byte(jsonString))
+			}
+			fmt.Println("http clients list:",httpclients)			
+		}
 		case "registerToken": {
 			t := strings.Join(r.Form["token"],"")
 			if len(t) >= 1 { allowsTokens[t] = true; }
@@ -70,6 +81,32 @@ func api(w http.ResponseWriter, r *http.Request ) {
 			} else {
 				w.Write([]byte(jsonString))
 			}
+		}
+		case "registerHttpClient": {
+			setConnection := false
+			token := "unregstered"
+			rtoken := strings.Join(r.Form["token"],"")
+			if len(rtoken) >= 1 {
+			   token = rtoken
+			} 
+			if websocketconfig.AllowUnregisteredHttpClients == "yes" { 
+				setConnection = true
+			} else { 
+				if allowsTokens[token] { 
+					setConnection = true
+				} 
+			}
+			if setConnection {
+				endpoint := strings.Join(r.Form["endpoint"],"") 
+				if len(endpoint) >= 1 {
+					httpclients[endpoint] = token
+					w.Write([]byte("done"))
+				} else {
+					w.Write([]byte("error"))
+				}
+			} else {
+				w.Write([]byte("error. unregistered token"))
+			}
 		}	
 	}
 }
@@ -80,7 +117,10 @@ type saiwebsocketconfig struct {
 	Origin string
 	Responseheaders string
 	AllowUnregisteredClients string
+	AllowUnregisteredHttpClients string
 	RegisteredTokensUrl string
+	Crtfile string
+	Keyfile string
 }
 
 var websocketconfig saiwebsocketconfig
@@ -124,12 +164,20 @@ func main() {
 
 	// Start the server 
 	fmt.Println("http server started on "+websocketconfig.Host+":"+websocketconfig.Port)
-	err := http.ListenAndServe(websocketconfig.Host+":"+websocketconfig.Port, nil)
-	//~ err := http.ListenAndServeTLS(websocketconfig.Host+":"+websocketconfig.Port, "localhost.crt", "localhost.key", nil)
-	//~ https://godoc.org/net/http#ListenAndServeTLS
-	if err != nil {
-		fmt.Println("Listen&Serve: ", err)
-	}
+	fmt.Println(len(websocketconfig.Crtfile));
+	if len(websocketconfig.Crtfile) > 0  {
+		fmt.Println("Serve wss..");
+		err := http.ListenAndServeTLS(websocketconfig.Host+":"+websocketconfig.Port, websocketconfig.Crtfile, websocketconfig.Keyfile, nil)
+		if err != nil {
+			fmt.Println("Listen&Serve tls: ", err)
+		} else {fmt.Println("Listen&Serve ") }
+	} else {
+		fmt.Println("Serve ws");
+		err := http.ListenAndServe(websocketconfig.Host+":"+websocketconfig.Port, nil)
+		if err != nil {
+			fmt.Println("Listen&Serve: ", err)
+		} else {fmt.Println("Listen&Serve ") }
+	} //~ https://godoc.org/net/http#ListenAndServeTLS
 }
 
 func handleConnections(w http.ResponseWriter, r *http.Request) {
@@ -207,6 +255,21 @@ func handleMessages() {
 						fmt.Println("error: %v", err)
 						client.Close()
 						delete(clients, client)
+					}
+				}
+			}
+		}
+		// Send it out to every http client that is currently connected
+		for httpclient,k := range httpclients {
+			tokens := strings.Split(string(msg), "|")
+			if len(tokens) >= 1 {
+				if strings.Contains(tokens[0], k) {  // OR tokens[0] == "TokenToBroadcastToAllClients"
+					fmt.Println("Now send ", msg, " To HTTP:", k)
+					_, err := http.PostForm(httpclient,url.Values{"message": {strings.TrimPrefix(msg, tokens[0]+"|")}})
+					time.Sleep(3 * time.Millisecond)
+					if err != nil {
+						fmt.Println("http cient error: %v", err)
+						delete(httpclients, httpclient)
 					}
 				}
 			}
