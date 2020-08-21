@@ -92,7 +92,7 @@ Register token from webclient side:
 Echo service:
 ``` Echo:message ```
 
-# API
+# You can manage the websocket server and communicate with the websocket clients over http/https using API
 - Broadcast Message
   - Parameters
     * method : broadcast
