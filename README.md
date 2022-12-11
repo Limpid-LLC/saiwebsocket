@@ -112,3 +112,11 @@ Echo service:
 - Get Registered Token List
   - Parameters
     * method : registeredTokenList
+
+Example: 
+```
+curl --location --request POST 'localhost:8000' \
+--header 'Content-Type: application/x-www-form-urlencoded' \
+--data-urlencode 'method=broadcast' \
+--data-urlencode 'message=abc|themessage'
+```
