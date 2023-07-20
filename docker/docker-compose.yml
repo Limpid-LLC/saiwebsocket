@@ -6,6 +6,6 @@ services:
       context: ./websocket
     tty: true
     ports:
-      - target: 8000
-        published: 8000
+      - target: 7981
+        published: 7981
         protocol: tcp 
