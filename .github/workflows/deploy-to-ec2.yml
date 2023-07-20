@@ -30,7 +30,7 @@ jobs:
           
           SERVICE_NAME=$(basename `git rev-parse --show-toplevel`)
           DIR_TO_UPLOAD="./"
-          REMOTE_DIR=$EC2_REMOTE_DIR$SERVICE_NAME
+          REMOTE_DIR=$EC2_REMOTE_DIR$SERVICE_NAME/docker
           
           go get
           ssh $SSH_OPTIONS "$EC2_REMOTE_USER@$EC2_REMOTE_SERVER" 'mkdir -p '$REMOTE_DIR
