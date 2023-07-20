@@ -14,4 +14,3 @@ RUN chmod +x /srv/websockets_pro
 
 CMD ./websockets_pro
 
-EXPOSE 7981 
