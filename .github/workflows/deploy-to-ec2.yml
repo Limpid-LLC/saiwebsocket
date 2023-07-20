@@ -30,10 +30,10 @@ jobs:
           
           SERVICE_NAME=$(basename `git rev-parse --show-toplevel`)
           DIR_TO_UPLOAD="./"
-          REMOTE_DIR=$EC2_REMOTE_DIR$SERVICE_NAME/docker
+          REMOTE_DIR=$EC2_REMOTE_DIR$SERVICE_NAME
           
           #go get
           ssh $SSH_OPTIONS "$EC2_REMOTE_USER@$EC2_REMOTE_SERVER" 'mkdir -p '$REMOTE_DIR
           rsync -avz --delete-before -e "ssh $SSH_OPTIONS" --exclude '.git' $DIR_TO_UPLOAD "$EC2_REMOTE_USER@$EC2_REMOTE_SERVER:$REMOTE_DIR"
-          ssh $SSH_OPTIONS "$EC2_REMOTE_USER@$EC2_REMOTE_SERVER" 'cd '$REMOTE_DIR' && docker-compose up -d --build --force-recreate --remove-orphans'
+          ssh $SSH_OPTIONS "$EC2_REMOTE_USER@$EC2_REMOTE_SERVER" 'cd '$REMOTE_DIR/docker' && docker-compose up -d --build --force-recreate --remove-orphans'
           rm /tmp/id_rsa
