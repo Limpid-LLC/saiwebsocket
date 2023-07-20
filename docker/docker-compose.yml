@@ -4,7 +4,6 @@ services:
   websocket:
     build:
       context: ./websocket
-    tty: true
     ports:
       - target: 7981
         published: 7981
