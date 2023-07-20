@@ -4,7 +4,6 @@ services:
   websocket:
     build:
       context: ./websocket
+      dockerfile: Dockerfile
     ports:
-      - target: 7981
-        published: 7981
-        protocol: tcp 
+      - "7981:7981"
