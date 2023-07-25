@@ -1,0 +1,2 @@
+        - name: ws
+          containerPort: 7981
