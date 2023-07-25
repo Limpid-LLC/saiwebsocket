@@ -1,9 +1,9 @@
 name: Deploy to EKS
 
 on:
-  #push:
-    #branches:
-    #  - main
+  push:
+    branches:
+      - main
   workflow_dispatch:
   workflow_call:
     inputs:
